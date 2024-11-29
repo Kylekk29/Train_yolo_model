@@ -74,10 +74,15 @@ elif source_type == 'folder':
         _, file_ext = os.path.splitext(file)
         if file_ext in img_ext_list:
             imgs_list.append(file)
-elif source_type == 'video': #TODO: Add setting of resolution?
-    cap = cv2.VideoCapture(source_type)
-elif source_type == 'usb': #TODO: Add setting of resolution?
-    cap = cv2.VideoCapture(usb_idx)
+elif source_type == 'video' or source_type == 'usb': #TODO: Add setting of resolution?
+
+    if source_type == 'video': cap_arg = img_source
+    elif source_type == 'usb': cap_arg = usb_idx
+    cap = cv2.VideoCapture(cap_arg)
+
+    # Set camera or video resolution if specified by user
+    ret = cap.set(3, resW)
+    ret = cap.set(4, resH)
 
 # Initialize control and status variables
 frame_rate_calc = 0
