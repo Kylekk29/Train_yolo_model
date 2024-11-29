@@ -32,8 +32,8 @@ user_res = args.resolution
 
 # Check if model file exists and is valid
 if (not os.path.exists(model_path)) or (not ('.pt' in model_path)):
-    print('Model path is invalid or model was not found, please enter the path to a YOLO .pt file.')
-    sys.exit(0)
+    print('WARNING: Model path is invalid or model was not found. Using default yolov8s.pt model instead.')
+    model_path = 'yolov8s.pt'
 
 # Load the model into memory and get labemap
 model = YOLO(model_path)
