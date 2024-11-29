@@ -40,12 +40,13 @@ model = YOLO(model_path)
 labels = model.names
 
 # Parse input to determine if image source is a file, folder, video, or USB camera
+img_ext_list = ['.jpg','.JPG','.jpeg','.JPEG','.png','.PNG','.bmp','.BMP']
+vid_ext_list = ['.avi','.mov','.mp4','.mkv','.wmv']
+
 if os.path.isdir(img_source):
     source_type = 'folder'
 elif os.path.isfile(img_source):
     _, ext = os.path.splitext(img_source)
-    img_ext_list = ['.jpg','.JPG','.jpeg','.JPEG','.png','.PNG','.bmp','.BMP']
-    vid_ext_list = ['.avi','.mov','.mp4','.mkv','.wmv']
     if ext in img_ext_list:
         source_type = 'image'
     elif ext in vid_ext_list:
@@ -83,8 +84,9 @@ elif source_type == 'video' or source_type == 'usb': #TODO: Add setting of resol
     cap = cv2.VideoCapture(cap_arg)
 
     # Set camera or video resolution if specified by user
-    ret = cap.set(3, resW)
-    ret = cap.set(4, resH)
+    if user_res:
+        ret = cap.set(3, resW)
+        ret = cap.set(4, resH)
 
 # Set bounding box colors (using the Tableu 10 color scheme)
 bbox_colors = [(164,120,87), (68,148,228), (93,97,209), (178,182,133), (88,159,106), 
@@ -120,7 +122,7 @@ while True:
             print('Unable to read frames from the camera. This indicates the camera is disconnected or not working. Exiting program.')
             break
 
-    # Resize frame to desired display resolution (note: inference stage will resize frame again to the input resolution of the YOLO model)
+    # Resize frame to desired display resolution
     if resize == True:
         frame = cv2.resize(frame,(resW,resH))
 
@@ -161,9 +163,9 @@ while True:
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), color, cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1) # Draw label text
 
-        # Basic example: count the number of objects in the image that match the first class in the labelmap
-        if classname == labels[0]:
-            object_count = object_count + 1
+            # Basic example: count the number of objects in the image that match the first class in the labelmap
+            if classname == labels[0]:
+                object_count = object_count + 1
 
     # Calculate and draw framerate (if using video or USB source)
     if source_type == 'video' or source_type == 'usb':
@@ -190,6 +192,6 @@ while True:
     frame_rate_calc = float(1/(t_stop - t_start))
 
 # Clean up
-if cap:
+if source_type == 'video' or source_type == 'usb':
     cap.release()
 cv2.destroyAllWindows()
