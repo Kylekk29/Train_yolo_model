@@ -6,9 +6,10 @@ Colab notebook for training YOLO models to be added soon.
 ## Usage Instructions
 The `yolo_detect.py` script provides a basic example that shows how to load a model, run inference on an image source, parse the inference results, and display boxes around each detected class in the image. This script shows how to work with YOLO models in Python, and it can be used as a starting point for more advanced applications. 
 
-To run inference with a yolov8s model on a USB camera at 1280x720 resolution, issue:
+To download `yolo_detect.py` and run inference with a yolov8s model on a USB camera at 1280x720 resolution, issue:
 
 ```
+curl --output yolo_detect.py https://raw.githubusercontent.com/EdjeElectronics/Train-and-Deploy-YOLO-Models/refs/heads/main/yolo_detect.py
 yolo_detect.py --model yolov8s.pt --source usb0 --resolution 1280x720
 ```
 
