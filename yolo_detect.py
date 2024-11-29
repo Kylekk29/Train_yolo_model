@@ -84,6 +84,10 @@ elif source_type == 'video' or source_type == 'usb': #TODO: Add setting of resol
     ret = cap.set(3, resW)
     ret = cap.set(4, resH)
 
+# Set bounding box colors (using the Tableu 10 color scheme)
+bbox_colors = [(164,120,87), (68,148,228), (93,97,209), (178,182,133), (88,159,106), 
+              (96,202,231), (159,124,168), (169,162,241), (98,118,150), (172,176,184)]
+
 # Initialize control and status variables
 frame_rate_calc = 0
 frame_count = 0
@@ -143,12 +147,13 @@ while True:
         # Draw box if confidence threshold is high enough
         if conf > 0.5:
 
-            cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), (0,255,0), 2)
+            color = bbox_colors[classidx % 10]
+            cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), color, 2)
 
             label = f'{classname}: {conf*100:.2f}%'
             labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1) # Get font size
             label_ymin = max(ymin, labelSize[1] + 10) # Make sure not to draw label too close to top of window
-            cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255,255,255), cv2.FILLED) # Draw white box to put label text in
+            cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), color, cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1) # Draw label text
 
         # Basic example: count the number of objects in the image that match the first class in the labelmap
