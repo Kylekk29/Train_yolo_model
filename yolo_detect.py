@@ -1,8 +1,10 @@
 import os
 import sys
 import argparse
-import cv2
 import glob
+import time
+
+import cv2
 from ultralytics import YOLO
 
 # Define and parse user input arguments
@@ -90,18 +92,21 @@ bbox_colors = [(164,120,87), (68,148,228), (93,97,209), (178,182,133), (88,159,1
 
 # Initialize control and status variables
 frame_rate_calc = 0
-frame_count = 0
+img_count = 0
 
 # Begin inference loop
 while True:
 
+    t_start = time.perf_counter()
+
     # Load frame from image source
     if source_type == 'image' or source_type == 'folder': # If source is image or image folder, load the image using its filename
-        if frame_count >= len(imgs_list):
+        if img_count >= len(imgs_list):
             print('All images have been processed. Exiting program.')
             sys.exit(0)
-        img_filename = imgs_list[frame_count]
+        img_filename = imgs_list[img_count]
         frame = cv2.imread(img_filename)
+        img_count = img_count + 1
     
     elif source_type == 'video': # If source is a video, load next frame from video file
         ret, frame = cap.read()
@@ -160,8 +165,12 @@ while True:
         if classname == labels[0]:
             object_count = object_count + 1
 
+    # Calculate and draw framerate (if using video or USB source)
+    if source_type == 'video' or source_type == 'usb':
+        cv2.putText(frame, f'FPS: {frame_rate_calc:0.2f}', (10,20), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw framerate
+    
     # Display detection results
-    cv2.putText(frame, f'Number of {labels[0]}s: {object_count}', (10,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2) # Draw total number of detected quarters in top left corner of image
+    cv2.putText(frame, f'Number of {labels[0]}s: {object_count}', (10,40), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw total number of detected quarters in top left corner of image
     cv2.imshow('YOLO detection results',frame) # Display image
 
     # If inferencing on individual images, wait for user keypress before moving to next image. Otherwise, wait 5ms before moving to next frame.
@@ -176,6 +185,9 @@ while True:
         cv2.waitKey()
     elif key == ord('p') or key == ord('P'): # Press 'p' to save a picture of results on this frame
         cv2.imwrite('capture.png',frame)
+    
+    t_stop = time.perf_counter()
+    frame_rate_calc = float(1/(t_stop - t_start))
 
 # Clean up
 if cap:
