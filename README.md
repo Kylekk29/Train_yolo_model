@@ -1,4 +1,4 @@
-# Train-and-Deploy-YOLO-Models
+# How to Train and Deploy YOLO Models with Ultralytics (YOLO 11, YOLOv8, and YOLOv5)
 Tutorials and examples showing how to train and deploy Ultralytics YOLO models.
 
 Colab notebook for training YOLO models to be added soon.
