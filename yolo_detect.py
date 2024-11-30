@@ -5,6 +5,7 @@ import glob
 import time
 
 import cv2
+import numpy as np
 from ultralytics import YOLO
 
 # Define and parse user input arguments
@@ -93,7 +94,9 @@ bbox_colors = [(164,120,87), (68,148,228), (93,97,209), (178,182,133), (88,159,1
               (96,202,231), (159,124,168), (169,162,241), (98,118,150), (172,176,184)]
 
 # Initialize control and status variables
-frame_rate_calc = 0
+avg_frame_rate = 0
+frame_rate_buffer = []
+fps_avg_len = 200
 img_count = 0
 
 # Begin inference loop
@@ -169,7 +172,7 @@ while True:
 
     # Calculate and draw framerate (if using video or USB source)
     if source_type == 'video' or source_type == 'usb':
-        cv2.putText(frame, f'FPS: {frame_rate_calc:0.2f}', (10,20), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw framerate
+        cv2.putText(frame, f'FPS: {avg_frame_rate:0.2f}', (10,20), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw framerate
     
     # Display detection results
     cv2.putText(frame, f'Number of {labels[0]}s: {object_count}', (10,40), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw total number of detected quarters in top left corner of image
@@ -188,8 +191,20 @@ while True:
     elif key == ord('p') or key == ord('P'): # Press 'p' to save a picture of results on this frame
         cv2.imwrite('capture.png',frame)
     
+    # Calculate FPS for this frame
     t_stop = time.perf_counter()
     frame_rate_calc = float(1/(t_stop - t_start))
+
+    # Append FPS result to frame_rate_buffer (for finding average FPS over multiple frames)
+    if len(frame_rate_buffer) >= fps_avg_len:
+        temp = frame_rate_buffer.pop(0)
+        frame_rate_buffer.append(frame_rate_calc)
+    else:
+        frame_rate_buffer.append(frame_rate_calc)
+
+    # Calculate average FPS for past frames
+    avg_frame_rate = np.mean(frame_rate_buffer)
+
 
 # Clean up
 if source_type == 'video' or source_type == 'usb':
