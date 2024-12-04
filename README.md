@@ -29,3 +29,4 @@ Here are all the arguments for yolo_detect.py:
     - Index of a connected USB camera (example: `usb0`)
 - `--thresh` (optional): Minimum confidence threshold for displaying detected objects. Default value is 0.5 (example: `0.4`)
 - `--resolution` (optional): Resolution in WxH to display inference results at. If not specified, the program will match use the source resolution. (example: `1280x720`)
+- `--record` (optional): Record a video of the results and save it as `demo1.avi`. (If using this option, the `--resolution` argument must also be specified.)
