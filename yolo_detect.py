@@ -21,6 +21,8 @@ parser.add_argument('--thresh', help='Minimum confidence threshold for displayin
 parser.add_argument('--resolution', help='Resolution in WxH to display inference results at (example: "640x480"), \
                     otherwise, match source resolution',
                     default=None)
+parser.add_argument('--record', help='Record results from video or webcam and save it as "demo1.avi". Must specify --resolution argument to record.',
+                    action='store_true')
 
 args = parser.parse_args()
 
@@ -30,6 +32,7 @@ model_path = args.model
 img_source = args.source
 min_thresh = args.thresh
 user_res = args.resolution
+record = args.record
 
 # Check if model file exists and is valid
 if (not os.path.exists(model_path)) or (not ('.pt' in model_path)):
@@ -67,6 +70,20 @@ resize = False
 if user_res:
     resize = True
     resW, resH = int(user_res.split('x')[0]), int(user_res.split('x')[1])
+
+# Check if recording is valid and set up recording
+if record:
+    if source_type not in ['video','usb']:
+        print('Recording only works for video and camera sources. Please try again.')
+        sys.exit(0)
+    if not user_res:
+        print('Please specify resolution to record video at.')
+        sys.exit(0)
+    
+    # Set up recording
+    record_name = 'demo1.avi'
+    record_fps = 30
+    recorder = cv2.VideoWriter(record_name, cv2.VideoWriter_fourcc(*'MJPG'), record_fps, (resW,resH))
 
 # Load or initialize image source
 if source_type == 'image':
@@ -160,7 +177,7 @@ while True:
             color = bbox_colors[classidx % 10]
             cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), color, 2)
 
-            label = f'{classname}: {conf*100:.2f}%'
+            label = f'{classname}: {int(conf*100)}%'
             labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1) # Get font size
             label_ymin = max(ymin, labelSize[1] + 10) # Make sure not to draw label too close to top of window
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), color, cv2.FILLED) # Draw white box to put label text in
@@ -177,6 +194,7 @@ while True:
     # Display detection results
     cv2.putText(frame, f'Number of {labels[0]}s: {object_count}', (10,40), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw total number of detected quarters in top left corner of image
     cv2.imshow('YOLO detection results',frame) # Display image
+    if record: recorder.write(frame)
 
     # If inferencing on individual images, wait for user keypress before moving to next image. Otherwise, wait 5ms before moving to next frame.
     if source_type == 'image' or source_type == 'folder':
@@ -207,6 +225,8 @@ while True:
 
 
 # Clean up
+print(f'Average pipeline FPS: {avg_frame_rate:.2f}')
 if source_type == 'video' or source_type == 'usb':
     cap.release()
+if record: recorder.release()
 cv2.destroyAllWindows()
