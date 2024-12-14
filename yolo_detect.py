@@ -35,12 +35,12 @@ user_res = args.resolution
 record = args.record
 
 # Check if model file exists and is valid
-#if (not os.path.exists(model_path)) or (not ('.pt' in model_path)):
-#    print('WARNING: Model path is invalid or model was not found. Using default yolov8s.pt model instead.')
-#    model_path = 'yolov8s.pt'
+if (not os.path.exists(model_path)):
+    print('WARNING: Model path is invalid or model was not found. Using default yolov8s.pt model instead.')
+    model_path = 'yolov8s.pt'
 
 # Load the model into memory and get labemap
-model = YOLO(model_path)
+model = YOLO(model_path, task='detect')
 labels = model.names
 
 # Parse input to determine if image source is a file, folder, video, or USB camera
@@ -183,16 +183,15 @@ while True:
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), color, cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1) # Draw label text
 
-            # Basic example: count the number of objects in the image that match the first class in the labelmap
-            if classname == labels[0]:
-                object_count = object_count + 1
+            # Basic example: count the number of objects in the image
+            object_count = object_count + 1
 
     # Calculate and draw framerate (if using video or USB source)
     if source_type == 'video' or source_type == 'usb':
         cv2.putText(frame, f'FPS: {avg_frame_rate:0.2f}', (10,20), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw framerate
     
     # Display detection results
-    cv2.putText(frame, f'Number of {labels[0]}s: {object_count}', (10,40), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw total number of detected quarters in top left corner of image
+    cv2.putText(frame, f'Number of objects: {object_count}', (10,40), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw total number of detected objects
     cv2.imshow('YOLO detection results',frame) # Display image
     if record: recorder.write(frame)
 
