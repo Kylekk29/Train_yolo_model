@@ -1,4 +1,4 @@
-# Split between train and val folders
+# Split dataset between train and val folders
 
 import glob
 import random
