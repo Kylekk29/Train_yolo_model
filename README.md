@@ -1,8 +1,11 @@
 # How to Train and Deploy YOLO Models with Ultralytics (YOLO11, YOLOv8, and YOLOv5)
 Tutorials and examples showing how to train and deploy Ultralytics YOLO models.
 
-**Work in progress!**
-Colab notebook for training YOLO models to be added soon.
+**This repository is a work in progress!**
+
+Click below to acces the initial Colab notebook for training YOLO models. I am still working on finalizing the notebook, but it currently includes all the steps needed for training.
+
+<a href="https://colab.research.google.com/github/EdjeElectronics/Train-and-Deploy-YOLO-Models/blob/main/Train_YOLO_Models.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
 ### Script Usage Instructions
 The `yolo_detect.py` script provides a basic example that shows how to load a model, run inference on an image source, parse the inference results, and display boxes around each detected class in the image. This script shows how to work with YOLO models in Python, and it can be used as a starting point for more advanced applications. 
