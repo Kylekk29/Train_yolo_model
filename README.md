@@ -1,8 +1,6 @@
 # How to Train and Deploy YOLO Models with Ultralytics (YOLO11, YOLOv8, and YOLOv5)
 Tutorials and examples showing how to train and deploy Ultralytics YOLO models.
 
-**This repository is a work in progress!**
-
 ## Train YOLO Models
 Click below to acces a Colab notebook for training YOLO models. It makes training a custom YOLO model as easy as uploading an image dataset and running a few blocks of code.
 
