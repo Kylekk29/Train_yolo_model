@@ -94,7 +94,8 @@ def inference_camera(source, model_fn, process_id):
                 object_count = object_count + 1
 
 
-        cv2.putText(frame,f'FPS: {frame_rate_avg:.2f}',(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2,cv2.LINE_AA)
+        cv2.putText(frame, f'FPS: {frame_rate_avg:0.2f}', (10,20), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw framerate
+        cv2.putText(frame, f'Number of objects: {object_count}', (10,40), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw total number of detected objects
         cv2.imshow(f'Camera {source} detections (Process {process_id})', frame)
 
         key = cv2.waitKey(5)
