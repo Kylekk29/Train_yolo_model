@@ -9,7 +9,7 @@ Anyway, follow the steps below to run YOLO detection on a Picamera!
 ## Requirements
 Raspberry Pi 4 or Raspberry Pi 5
 
-## Setup Steps
+## Setup Instructions
 
 1. Use [Raspberry Pi Imager](https://www.raspberrypi.com/software/) to flash the latest version of 64-bit Raspberry Pi OS onto an SD card.
 2. Plug in a monitor, keyboard, mouse, and Picamera into the Raspberry Pi and turn it on.
@@ -26,7 +26,7 @@ Raspberry Pi 4 or Raspberry Pi 5
 Now you're ready to run the script! Run it using the following command, where `--model` points to the NCNN model folder and `--resolution` is the resolution you want to run the camera at.
 
 ```
-yolo_detect_picamera.py --model=yolo11n_ncnn_model --resolution=640x480
+python yolo_detect_picamera.py --model=yolo11n_ncnn_model --resolution=640x480
 ```
 
-A window will appear showing the Picamera's live view with detections drawn on each frame.
+A window will appear showing the Picamera's live view with detections drawn on each frame. Use `python yolo_detect_picamera.py --help` to see other options for running the script.
