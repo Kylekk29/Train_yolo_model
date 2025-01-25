@@ -1,6 +1,6 @@
-# Run YOLO detection on Raspberry Pi using a Picamera
+# Run YOLO Detection on Raspberry Pi using a Picamera
 
-Using a Picamera with YOLO is a little different than a standard USB camera because we have to use the Picamera2-Python library to read from the Picamera. Unfortunately, Picamera2-Python can't be easily installed in a virtual environment. Instead, we have to install the Ultralytics and OpenCV libraries in the native Python environment. This is fine but it's also a little scary because it can cause version conflicts with existing Python libraries.
+On the Raspberry Pi, using a Picamera with YOLO is a little different than a standard USB camera because we have to use the Picamera2-Python library to read from the Picamera. Unfortunately, Picamera2-Python can't be easily installed in a virtual environment. Instead, we have to install the Ultralytics and OpenCV libraries in the native Python environment. This is fine but it's also a little scary because it can cause version conflicts with existing Python libraries.
 
 **So, it is highly recommended to start with a fresh install of the latest version of 64-bit Raspberry Pi OS if you are using the Picamera with YOLO!**
 
