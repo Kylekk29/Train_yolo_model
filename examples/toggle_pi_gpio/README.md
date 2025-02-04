@@ -26,7 +26,7 @@ Software required:
 The hardware setup for this example is fairly straightforward. Simply connect the GPIO pins to the AC Power Relay inputs as shown in the diagram below. Connect the input power plug to a wall outlet. Plug a lamp (or other device) into one of the "normally OFF" power plugs on the relay.
 
 <p align="center">
-  <img src="../../doc/smart-lamp-diagram.png">
+  <img src="../../doc/smart-lamp-diagram-small.png">
 </p>
 
 With this configuration, whenever Raspberry Pi GPIO 14 is set HIGH, the "normally OFF" power plug will switch ON, turning on the lamp. Easy as pie!
