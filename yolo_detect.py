@@ -202,8 +202,8 @@ while True:
             # Basic example: count the number of objects in the image
             object_count = object_count + 1
 
-    # Calculate and draw framerate (if using video or USB source)
-    if source_type == 'video' or source_type == 'usb':
+    # Calculate and draw framerate (if using video, USB, or Picamera source)
+    if source_type == 'video' or source_type == 'usb' or source_type == 'picamera':
         cv2.putText(frame, f'FPS: {avg_frame_rate:0.2f}', (10,20), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw framerate
     
     # Display detection results
