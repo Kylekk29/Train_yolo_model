@@ -36,8 +36,8 @@ record = args.record
 
 # Check if model file exists and is valid
 if (not os.path.exists(model_path)):
-    print('WARNING: Model path is invalid or model was not found. Using default yolov8s.pt model instead.')
-    model_path = 'yolov8s.pt'
+    print('ERROR: Model path is invalid or model was not found. Make sure the model filename was entered correctly.')
+    sys.exit(0)
 
 # Load the model into memory and get labemap
 model = YOLO(model_path, task='detect')
@@ -61,6 +61,9 @@ elif os.path.isfile(img_source):
 elif 'usb' in img_source:
     source_type = 'usb'
     usb_idx = int(img_source[3:])
+elif 'picamera' in img_source:
+    source_type = 'picamera'
+    picam_idx = int(img_source[8:])
 else:
     print(f'Input {img_source} is invalid. Please try again.')
     sys.exit(0)
@@ -95,7 +98,7 @@ elif source_type == 'folder':
         _, file_ext = os.path.splitext(file)
         if file_ext in img_ext_list:
             imgs_list.append(file)
-elif source_type == 'video' or source_type == 'usb': #TODO: Add setting of resolution?
+elif source_type == 'video' or source_type == 'usb':
 
     if source_type == 'video': cap_arg = img_source
     elif source_type == 'usb': cap_arg = usb_idx
@@ -105,6 +108,12 @@ elif source_type == 'video' or source_type == 'usb': #TODO: Add setting of resol
     if user_res:
         ret = cap.set(3, resW)
         ret = cap.set(4, resH)
+
+elif source_type == 'picamera':
+    from picamera2 import Picamera2
+    cap = Picamera2()
+    cap.configure(cap.create_video_configuration(main={"format": 'XRGB8888', "size": (resW, resH)}))
+    cap.start()
 
 # Set bounding box colors (using the Tableu 10 color scheme)
 bbox_colors = [(164,120,87), (68,148,228), (93,97,209), (178,182,133), (88,159,106), 
@@ -140,6 +149,13 @@ while True:
         ret, frame = cap.read()
         if (frame is None) or (not ret):
             print('Unable to read frames from the camera. This indicates the camera is disconnected or not working. Exiting program.')
+            break
+
+    elif source_type == 'picamera': # If source is a Picamera, grab frames using picamera interface
+        frame_bgra = cap.capture_array()
+        frame = cv2.cvtColor(np.copy(frame_bgra), cv2.COLOR_BGRA2BGR)
+        if (frame is None):
+            print('Unable to read frames from the Picamera. This indicates the camera is disconnected or not working. Exiting program.')
             break
 
     # Resize frame to desired display resolution
@@ -186,8 +202,8 @@ while True:
             # Basic example: count the number of objects in the image
             object_count = object_count + 1
 
-    # Calculate and draw framerate (if using video or USB source)
-    if source_type == 'video' or source_type == 'usb':
+    # Calculate and draw framerate (if using video, USB, or Picamera source)
+    if source_type == 'video' or source_type == 'usb' or source_type == 'picamera':
         cv2.putText(frame, f'FPS: {avg_frame_rate:0.2f}', (10,20), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,255,255), 2) # Draw framerate
     
     # Display detection results
@@ -198,7 +214,7 @@ while True:
     # If inferencing on individual images, wait for user keypress before moving to next image. Otherwise, wait 5ms before moving to next frame.
     if source_type == 'image' or source_type == 'folder':
         key = cv2.waitKey()
-    elif source_type == 'video' or source_type == 'usb':
+    elif source_type == 'video' or source_type == 'usb' or source_type == 'picamera':
         key = cv2.waitKey(5)
     
     if key == ord('q') or key == ord('Q'): # Press 'q' to quit
@@ -227,5 +243,7 @@ while True:
 print(f'Average pipeline FPS: {avg_frame_rate:.2f}')
 if source_type == 'video' or source_type == 'usb':
     cap.release()
+elif source_type == 'picamera':
+    cap.stop()
 if record: recorder.release()
 cv2.destroyAllWindows()
