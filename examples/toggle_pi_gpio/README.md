@@ -52,10 +52,10 @@ Open the `toggle_pi_gpio.py` Python script with a text editor like Thonny or Nan
 ```
 # User-defined parameters
 model_path = 'yolo11n_ncnn_model'	# Path to model file or folder
-cam_source = 'usb0' 				# Options: 'usb0' for USB camera, 'picamera0' for Picamera
-min_thresh = 0.5 					# Minimum detection threshold
-resW, resH = 1280, 720				# Resolution to run camera at
-record = False						# Enables recording if True
+cam_source = 'usb0' 				      # Options: 'usb0' for USB camera, 'picamera0' for Picamera
+min_thresh = 0.5 					        # Minimum detection threshold
+resW, resH = 1280, 720				    # Resolution to run camera at
+record = False						        # Enables recording if True
 ```
 
 You'll also need to adjust the `pbox_xmin/ymin/xmax/ymax` coordinates starting at Line 28 to set the region of where to look for a person. This will take some trial-and-error of positioning the camera, running the program, and adjusting the coordinates to move the box to the desired location of the screen.
