@@ -46,4 +46,5 @@ Here are all the arguments for yolo_detect.py:
 
 ### Deploy on Raspberry Pi
 The Raspberry Pi 4 and 5 are just powerful enough to run nano and small-sized YOLO models in real time. The article linked below walks through how to run YOLO models on the Raspberry Pi.
+
 [How to Run YOLO Detection Models on the Raspberry Pi](https://www.ejtech.io/learn/yolo-on-raspberry-pi)
