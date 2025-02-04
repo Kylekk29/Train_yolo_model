@@ -44,7 +44,7 @@ source venv/bin/activate
 
 Next, download the `toggle_pi_gpio.py` example by issuing:
 ```
-wget -url-to-be-added-
+wget https://raw.githubusercontent.com/EdjeElectronics/Train-and-Deploy-YOLO-Models/refs/heads/main/examples/toggle_pi_gpio/toggle_pi_gpio.py
 ```
 
 Open the `toggle_pi_gpio.py` Python script with a text editor like Thonny or Nano, and set the variables in the `# User-defined variables` section at the top to configure the path to the model file or folder, the camera source, and the resolution to run at.
