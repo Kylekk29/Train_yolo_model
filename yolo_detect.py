@@ -214,7 +214,7 @@ while True:
     # If inferencing on individual images, wait for user keypress before moving to next image. Otherwise, wait 5ms before moving to next frame.
     if source_type == 'image' or source_type == 'folder':
         key = cv2.waitKey()
-    elif source_type == 'video' or source_type == 'usb':
+    elif source_type == 'video' or source_type == 'usb' or source_type == 'picamera':
         key = cv2.waitKey(5)
     
     if key == ord('q') or key == ord('Q'): # Press 'q' to quit
