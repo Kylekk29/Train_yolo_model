@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--model', help='Path to YOLO model file (example: "runs/detect/train/weights/best.pt")',
                     required=True)
 parser.add_argument('--source', help='Image source, can be image file ("test.jpg"), \
-                    image folder ("test_dir"), video file ("testvid.mp4"), or index of USB camera ("usb0")', 
+                    image folder ("test_dir"), video file ("testvid.mp4"), index of USB camera ("usb0"), or index of Picamera ("picamera0")', 
                     required=True)
 parser.add_argument('--thresh', help='Minimum confidence threshold for displaying detected objects (example: "0.4")',
                     default=0.5)
@@ -112,7 +112,7 @@ elif source_type == 'video' or source_type == 'usb':
 elif source_type == 'picamera':
     from picamera2 import Picamera2
     cap = Picamera2()
-    cap.configure(cap.create_video_configuration(main={"format": 'XRGB8888', "size": (resW, resH)}))
+    cap.configure(cap.create_video_configuration(main={"format": 'RGB888', "size": (resW, resH)}))
     cap.start()
 
 # Set bounding box colors (using the Tableu 10 color scheme)
@@ -152,8 +152,7 @@ while True:
             break
 
     elif source_type == 'picamera': # If source is a Picamera, grab frames using picamera interface
-        frame_bgra = cap.capture_array()
-        frame = cv2.cvtColor(np.copy(frame_bgra), cv2.COLOR_BGRA2BGR)
+        frame = cap.capture_array()
         if (frame is None):
             print('Unable to read frames from the Picamera. This indicates the camera is disconnected or not working. Exiting program.')
             break
