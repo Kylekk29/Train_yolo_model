@@ -114,15 +114,15 @@ def inference_camera(source, model_fn, process_id):
 # Entry point for main program
 if __name__ == '__main__':
     
-    # Define list of camera sources and model to use
+    # Define list of camera sources (by USB index) and models to use
     sources = [0, 1, 2, 3]
-    model = 'yolo11s.pt'
+    models = ['yolo11s.pt', 'yolo11s.pt', 'yolo11s.pt', 'yolo11s.pt']
     
     # Create a new process for each camera source. The process targets the "inference_camera" function.
     # Basically, for each camera, it will open a new Python subprocess that runs the "inference_camera" function,
     # which will grab frames from the camera, run inference on them, and display results.
     procs = []
     for i in range(len(sources)):
-        process = Process(target=inference_camera, args=(sources[i], model, i))
+        process = Process(target=inference_camera, args=(sources[i], models[i], i))
         process.start()
         procs.append(process)
