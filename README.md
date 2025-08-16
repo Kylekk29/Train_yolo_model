@@ -11,3 +11,7 @@ Click below to access a Colab notebook for training YOLO models. It makes traini
 
 **Option 2. Open in local environment**
 Run the code in the Colab notebook with an Nvidia GPU
+
+## For Roboflow dataset
+
+<a href="https://colab.research.google.com/github/Kylekk29/Train_yolo_model/blob/main/Train_YOLO_Models_roboflow.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
